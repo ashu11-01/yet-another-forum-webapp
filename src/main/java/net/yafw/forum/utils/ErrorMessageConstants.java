@@ -1,4 +1,4 @@
-package utils;
+package net.yafw.forum.utils;
 
 public interface ErrorMessageConstants {
 	
