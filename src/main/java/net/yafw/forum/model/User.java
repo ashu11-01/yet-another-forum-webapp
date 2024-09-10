@@ -43,8 +43,9 @@ public class User extends BaseModel{
 	@JsonIgnore
 	@OneToMany(mappedBy = "author")
 	private List<Post> userPosts;
+	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private String password;
+	private String password;	
 	
 	/**
 	 * Empty Constructor for Hibernate serialization
@@ -52,6 +53,9 @@ public class User extends BaseModel{
 	protected User() {
 		super();
 	}
+	
+	
+
 	/**
 	 * @param id
 	 * @param firstName
@@ -74,6 +78,8 @@ public class User extends BaseModel{
 		this.userPosts = userPosts;
 		this.password = password;
 	}
+
+
 
 	public UUID getId() {
 		return id;

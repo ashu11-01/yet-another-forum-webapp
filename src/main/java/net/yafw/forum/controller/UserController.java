@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.yafw.forum.exception.ExistingResourceException;
 import net.yafw.forum.exception.UserNotFoundException;
+import net.yafw.forum.model.LoginRequest;
+import net.yafw.forum.model.LoginResponse;
 import net.yafw.forum.model.Post;
 import net.yafw.forum.model.User;
 import net.yafw.forum.service.UserService;
@@ -87,8 +89,11 @@ public class UserController {
 		return userService.registerUser(user);
 	}
 	
+
 	@PostMapping(path="/users/login")
-	public User login(@RequestBody User user) throws ExistingResourceException {
-		return userService.authenticate(user);
+	public LoginResponse login(@RequestBody LoginRequest loginRequest)throws ExistingResourceException { 
+		return userService.authenticate(loginRequest);
 	}
+
+
 }
