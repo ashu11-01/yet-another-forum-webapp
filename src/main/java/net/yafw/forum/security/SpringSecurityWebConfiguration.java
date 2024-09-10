@@ -1,5 +1,6 @@
 package net.yafw.forum.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,8 +16,9 @@ import net.yafw.forum.utils.CommonConstants;
 @EnableWebSecurity
 public class SpringSecurityWebConfiguration implements CommonConstants{
 
-//	@Autowired
-//	CustomAuthorizationFilter customAuthorizationFilter;
+	@Autowired
+	CustomAuthorizationFilter customAuthorizationFilter;
+
 	@Bean
 	public SecurityFilterChain customfilterChain(HttpSecurity http) throws Exception {
 		http.
@@ -24,7 +26,7 @@ public class SpringSecurityWebConfiguration implements CommonConstants{
 				auth -> auth.requestMatchers("/api/forum/v1/**").authenticated()
 				);
 		http.csrf( (csrf) -> csrf.disable());
-		http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 	
@@ -38,9 +40,4 @@ public class SpringSecurityWebConfiguration implements CommonConstants{
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder(10);
 	}
-	
-//	@Bean
-//	public CustomAuthorizationFilter customAuthorizationFilter() {
-//		return new CustomAuthorizationFilter();
-//	}
 }

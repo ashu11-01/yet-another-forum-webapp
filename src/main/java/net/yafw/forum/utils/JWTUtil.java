@@ -2,6 +2,8 @@ package net.yafw.forum.utils;
 
 import java.util.Date;
 
+import net.yafw.forum.service.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.auth0.jwt.JWT;
@@ -10,23 +12,24 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import net.yafw.forum.model.User;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Component
 public class JWTUtil {
 
-	@Value("${security.jwt.secret}")
-	private static String jwtSecret;
-	@Value("{security.jwt.validiy}")
-	private static int tokenValidityInMinutes;
-	/**
+	@Autowired
+	AppConfig appConfig;
+
+    /**
 	 * 
-	 * @param existingUser
-	 * @return
+	 * @param existingUser the authenticated user
+	 * @return the Json Web Token (JWT)
 	 */
-	public static String getToken(User existingUser) {
-		jwtSecret = System.getenv("security.jwt.secret");
-		tokenValidityInMinutes = Integer.parseInt(System.getenv("security.jwt.validiy"));
-		Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
-		long tokenValidity = System.currentTimeMillis() + tokenValidityInMinutes * 60 * 1000;
+	public String getToken(User existingUser) {
+		Algorithm algorithm = Algorithm.HMAC256(appConfig.getJwtSecret());
+		long tokenValidity = System.currentTimeMillis() + appConfig.getTokenValidityInMinutes()
+				* 60L * 1000;
 		Builder builder =  JWT.
 			create().
 			withSubject(existingUser.getUserName()).
@@ -38,8 +41,8 @@ public class JWTUtil {
 		return builder.sign(algorithm);
 	}
 	
-	public static boolean verifyToken(String accessToken,String username) {
-		Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
+	public boolean verifyToken(String accessToken,String username) {
+		Algorithm algorithm = Algorithm.HMAC256(appConfig.getJwtSecret());
 		DecodedJWT decodedJWT = null;
 		decodedJWT = JWT.require(algorithm).build().verify(accessToken);
 		return decodedJWT.getSubject().equals(username);
