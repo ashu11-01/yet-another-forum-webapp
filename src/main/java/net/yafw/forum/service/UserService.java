@@ -35,10 +35,10 @@ public class UserService implements IBasicService, UserDetailsService {
 
 	private UserJPARepository userDataStore;
 	private PostJPARepository postDataStore;
-//	private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10);
 	private MessageSource messageSouce;
 	private PasswordEncoder passwordEncoder;
-
+	@Autowired
+	JWTUtil jwtUtil;
 	@Autowired
 	public UserService(UserJPARepository userDataStore, PostJPARepository postDataStore, MessageSource messageSouce,
 			PasswordEncoder passwordEncoder) {
@@ -159,9 +159,9 @@ public class UserService implements IBasicService, UserDetailsService {
 	}
 
 	/**
-	 * 
-	 * @param user
-	 * @return
+	 *
+	 * @param loginRequest the login request
+	 * @return the login response
 	 */
 	public LoginResponse authenticate(@Valid LoginRequest loginRequest) { 
 		LoginResponse authenticatedUser = null;
@@ -171,12 +171,8 @@ public class UserService implements IBasicService, UserDetailsService {
 			existingUser = userDataStore.findByUserName(requestUsername); 
 		}
 		if(existingUser != null) {
-//			START: Tactical solution for encoding password.
-//			TODO : Spring Security to be used
-//			 if(BCrypt.checkpw(user.getPassword(), existingUser.getPassword())){
-//			END :  Tactical solution for encoding password.
 			if(passwordEncoder.matches(loginRequest.getPassword(), existingUser.getPassword())) {
-				String token = (JWTUtil.getToken(existingUser));
+				String token = (jwtUtil.getToken(existingUser));
 				authenticatedUser = new LoginResponse(existingUser.getUserName(),
 						existingUser, token);
 			} 

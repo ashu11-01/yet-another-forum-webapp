@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -17,8 +19,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.yafw.forum.utils.CommonConstants;
 import net.yafw.forum.utils.JWTUtil;
-
+@Component
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
+
+	@Autowired
+	JWTUtil jwtUtil;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -30,7 +35,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 		else {
 			String username = request.getHeader("X-username");
 			String accessToken = request.getHeader("Authorization").substring("Bearer ".length());
-			boolean isTokenValid = JWTUtil.verifyToken(accessToken, username);
+			boolean isTokenValid = jwtUtil.verifyToken(accessToken, username);
 			if(isTokenValid) {
 				Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("USER"));
