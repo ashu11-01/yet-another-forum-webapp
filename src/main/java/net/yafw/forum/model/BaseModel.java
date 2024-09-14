@@ -1,25 +1,25 @@
 package net.yafw.forum.model;
 
-import java.sql.Timestamp;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 
-public abstract class BaseModel {
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
-	/*
-	 * private UUID id; private Timestamp created; private Timestamp modified;
-	 * 
-	 * public UUID getId() { return id; } public void setId(UUID id) { this.id = id;
-	 * } public Timestamp getCreated() { return created; } public void
-	 * setCreated(Timestamp created) { this.created = created; } public Timestamp
-	 * getModified() { return modified; } public void setModified(Timestamp
-	 * modified) { this.modified = modified; }
-	 *//**
-		 * @param id
-		 * @param created
-		 * @param modified
-		 *//*
-			 * public BaseModel() { super(); id = UUID.randomUUID(); created = new
-			 * Timestamp(System.currentTimeMillis()); modified = new
-			 * Timestamp(System.currentTimeMillis()); }
-			 */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class BaseModel<T> {
+
+	 private boolean isSuccess;
+	 private List<String> errorMessages;
+	 private T data;
+	 private String timeStamp;
 }
