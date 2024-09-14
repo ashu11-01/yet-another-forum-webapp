@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Size;
 
 @Entity(name = "post_details")
-public class Post extends BaseModel{
+public class Post{
 	
 	@Column(name="id",unique = true)
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -27,7 +27,7 @@ public class Post extends BaseModel{
 	
 	private List<String> tags;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User author;
 	
 	private int upVotes;

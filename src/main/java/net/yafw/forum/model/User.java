@@ -15,7 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 @Entity(name = "user_details")
-public class User extends BaseModel{
+public class User{
 
 	@Column(name="id",unique = true)
 	@GeneratedValue(strategy = GenerationType.UUID)
