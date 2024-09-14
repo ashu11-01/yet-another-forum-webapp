@@ -19,23 +19,23 @@ public interface UserJPARepository extends JpaRepository<User, UUID> {
 
 	/**
 	 * Returns a user with given userName, if exists
-	 * @param userName
+	 * @param userName username of the User to search
 	 * @return {@link User}
 	 */
 	public User findByUserName(String userName);
 	
 	/**
 	 * Returns a user with given userEmailAddress, if exists
-	 * @param userEmailAddress
+	 * @param userEmailAddress email Address of the user to search
 	 * @return {@link User}
 	 */
 	public User findByUserEmailAddress(String userEmailAddress);
 	
 	/**
 	 * Returns a user matching with either given userName or given userEmailAddress
-	 * @param userName
-	 * @param userEmailAddress
-	 * @return
+	 * @param userName username of the User to search
+	 * @param userEmailAddress email Address of the user to search
+	 * @return return the User if exists
 	 */
 	public User findByUserNameOrUserEmailAddress(String userName, String userEmailAddress);
 }

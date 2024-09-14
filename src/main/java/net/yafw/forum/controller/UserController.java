@@ -43,7 +43,7 @@ public class UserController {
 	@GetMapping(path="/users/{id}")
 	
 	public EntityModel<User> getUser(@PathVariable UUID id) throws UserNotFoundException {
-		User user = null;
+		User user;
 		try {
 			user = userService.findOne(id);
 		} catch (UserNotFoundException e) {

@@ -17,7 +17,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
 				ex.getMessage(), request.getDescription(false));
 		
-		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 		
 	}
 	
@@ -25,6 +25,6 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	public ResponseEntity<ErrorDetails> handlerExistingResourceException(Exception ex, WebRequest request){
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),request.getDescription(false));
 		
-		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.CONFLICT);
+		return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
 	}
 }
