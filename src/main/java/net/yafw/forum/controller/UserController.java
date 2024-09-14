@@ -4,6 +4,7 @@ package net.yafw.forum.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
@@ -30,10 +31,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/forum/v1")
 public class UserController {
 
+	@Autowired
 	private UserService userService;
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
 	
 	@GetMapping(path="/users")
 	public List<User> getAllUsers(){
@@ -44,12 +43,8 @@ public class UserController {
 	
 	public EntityModel<User> getUser(@PathVariable UUID id) throws UserNotFoundException {
 		User user;
-		try {
-			user = userService.findOne(id);
-		} catch (UserNotFoundException e) {
-			throw e;
-		}
-		EntityModel<User> userEntity = EntityModel.of(user);
+        user = userService.findOne(id);
+        EntityModel<User> userEntity = EntityModel.of(user);
 		WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllUsers());
 		userEntity.add(link.withRel("all-users"));
 		return userEntity;
@@ -62,12 +57,8 @@ public class UserController {
 	
 	@DeleteMapping(path="/users/{id}")
 	public void deleteUser(@PathVariable UUID id) throws UserNotFoundException {
-		try {
-			userService.removeUser(id);
-		} catch (UserNotFoundException e) {
-			throw e;
-		}
-	}
+        userService.removeUser(id);
+    }
 	
 	@PutMapping(path="/users/{id}")
 	public User updateUser(@RequestBody User user, @PathVariable UUID id) throws UserNotFoundException {
@@ -91,7 +82,7 @@ public class UserController {
 	
 
 	@PostMapping(path="/users/login")
-	public LoginResponse login(@RequestBody LoginRequest loginRequest)throws ExistingResourceException { 
+	public LoginResponse login(@RequestBody LoginRequest loginRequest) throws UserNotFoundException{
 		return userService.authenticate(loginRequest);
 	}
 

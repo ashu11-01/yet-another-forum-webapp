@@ -31,7 +31,7 @@ public class User{
 	@Column(name = "first_name",nullable = false)
 	private String firstName;
 	
-	@Column(name = "last_name",nullable = true)
+	@Column(name = "last_name")
 	private String lastName;
 	
 	private int reputation;
@@ -42,7 +42,7 @@ public class User{
 	private String userName;
 	
 	@Email
-	@Column(name = "email",unique = true, nullable = true)
+	@Column(name = "email",unique = true)
 	private String userEmailAddress;
 	
 	@JsonIgnore

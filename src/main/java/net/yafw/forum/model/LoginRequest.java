@@ -1,7 +1,9 @@
 package net.yafw.forum.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class LoginRequest {
 
@@ -21,11 +23,4 @@ public class LoginRequest {
 		this.password = password;
 	}
 
-    public void setUsername(String username) {
-		this.username = username;
-	}
-
-    public void setPassword(String password) {
-		this.password = password;
-	}
 }

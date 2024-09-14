@@ -22,14 +22,14 @@ public interface UserJPARepository extends JpaRepository<User, UUID> {
 	 * @param userName username of the User to search
 	 * @return {@link User}
 	 */
-	public User findByUserName(String userName);
+    User findByUserName(String userName);
 	
 	/**
 	 * Returns a user with given userEmailAddress, if exists
 	 * @param userEmailAddress email Address of the user to search
 	 * @return {@link User}
 	 */
-	public User findByUserEmailAddress(String userEmailAddress);
+    User findByUserEmailAddress(String userEmailAddress);
 	
 	/**
 	 * Returns a user matching with either given userName or given userEmailAddress
@@ -37,5 +37,5 @@ public interface UserJPARepository extends JpaRepository<User, UUID> {
 	 * @param userEmailAddress email Address of the user to search
 	 * @return return the User if exists
 	 */
-	public User findByUserNameOrUserEmailAddress(String userName, String userEmailAddress);
+    User findByUserNameOrUserEmailAddress(String userName, String userEmailAddress);
 }

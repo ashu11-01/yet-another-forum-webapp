@@ -149,7 +149,7 @@ public class UserService implements IBasicService, UserDetailsService {
 	 * @param loginRequest the login request
 	 * @return the login response
 	 */
-	public LoginResponse authenticate(@Valid LoginRequest loginRequest) { 
+	public LoginResponse authenticate(@Valid LoginRequest loginRequest) throws UserNotFoundException {
 		LoginResponse authenticatedUser = null;
 		User existingUser = null;
 		String requestUsername = loginRequest.getUsername();
@@ -162,6 +162,9 @@ public class UserService implements IBasicService, UserDetailsService {
 				authenticatedUser = new LoginResponse(existingUser.getUserName(),
 						existingUser, token);
 			}
+		}
+		else{
+			throw new UserNotFoundException("User not found:"+loginRequest.getUsername());
 		}
 		return authenticatedUser; 
 	}
