@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -20,12 +21,12 @@ public class SpringSecurityWebConfiguration implements CommonConstants{
 	CustomAuthorizationFilter customAuthorizationFilter;
 
 	@Bean
-	public SecurityFilterChain customfilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
 		http.
 			authorizeHttpRequests(
 				auth -> auth.requestMatchers("/api/forum/v1/**").authenticated()
 				);
-		http.csrf( (csrf) -> csrf.disable());
+		http.csrf(AbstractHttpConfigurer::disable);
 		http.addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

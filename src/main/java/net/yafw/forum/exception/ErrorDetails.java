@@ -2,40 +2,16 @@ package net.yafw.forum.exception;
 
 import java.time.LocalDateTime;
 
-public class ErrorDetails {
 
-	private LocalDateTime timestamp;
-	private String errorMessage;
-	private String errorDescription;
+public record ErrorDetails(LocalDateTime timestamp, String errorMessage, String errorDescription) {
 
-	
 	/**
-	 * @param timestamp
-	 * @param errorMessage
-	 * @param errorDescription
+	 * @param timestamp        timestamp of the error
+	 * @param errorMessage     the error message
+	 * @param errorDescription the error description
 	 */
-	public ErrorDetails(LocalDateTime timestamp, String errorMessage, String errorDescription) {
-		super();
-		this.timestamp = timestamp;
-		this.errorMessage = errorMessage;
-		this.errorDescription = errorDescription;
+	public ErrorDetails {
 	}
 
-
-	public LocalDateTime getTimestamp() {
-		return timestamp;
-	}
-
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-
-	public String getErrorDescription() {
-		return errorDescription;
-	}
-	
-	
 
 }

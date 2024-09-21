@@ -4,7 +4,6 @@ import java.util.Date;
 
 import net.yafw.forum.service.AppConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator.Builder;
@@ -13,7 +12,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import net.yafw.forum.model.User;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 public class JWTUtil {
@@ -43,7 +41,7 @@ public class JWTUtil {
 	
 	public boolean verifyToken(String accessToken,String username) {
 		Algorithm algorithm = Algorithm.HMAC256(appConfig.getJwtSecret());
-		DecodedJWT decodedJWT = null;
+		DecodedJWT decodedJWT;
 		decodedJWT = JWT.require(algorithm).build().verify(accessToken);
 		return decodedJWT.getSubject().equals(username);
 	}

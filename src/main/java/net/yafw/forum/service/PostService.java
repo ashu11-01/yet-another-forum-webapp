@@ -30,7 +30,7 @@ public class PostService {
             errorMessageList.add("Successful");
             isSuccess = true;
         }
-        return new BaseModel<Post>(isSuccess,errorMessageList,
+        return new BaseModel<>(isSuccess, errorMessageList,
                 post, Calendar.getInstance().getTime().toString()
         );
     }
@@ -52,7 +52,7 @@ public class PostService {
                     postToUpdate.getTags(),existingPost.getAuthor(),existingPost.getUpVotes(),existingPost.getDownVotes());
             post = postRepository.save(post);
         }
-        return new BaseModel<Post>(isSuccess,errorMessageList,
+        return new BaseModel<>(isSuccess, errorMessageList,
                 post, Calendar.getInstance().getTime().toString()
         );
     }
@@ -72,7 +72,7 @@ public class PostService {
             postRepository.deleteById(postId);
             message = "Post deleted successfully";
         }
-        return new BaseModel<String>(isSuccess,errorMessageList,
+        return new BaseModel<>(isSuccess, errorMessageList,
                 message, Calendar.getInstance().getTime().toString()
         );
     }

@@ -33,23 +33,19 @@ import net.yafw.forum.utils.JWTUtil;
 @Component
 public class UserService implements IBasicService, UserDetailsService {
 
+	@Autowired
 	private UserJPARepository userDataStore;
-	private PostJPARepository postDataStore;
-	private MessageSource messageSouce;
+	@Autowired
+	private  PostJPARepository postDataStore;
+	@Autowired
+	private MessageSource messageSource;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	JWTUtil jwtUtil;
-	@Autowired
-	public UserService(UserJPARepository userDataStore, PostJPARepository postDataStore, MessageSource messageSouce,
-			PasswordEncoder passwordEncoder) {
-		this.userDataStore = userDataStore;
-		this.postDataStore = postDataStore;
-		this.messageSouce = messageSouce;
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	public List<User> retrieveUsers() {
-		List<User> userList = new ArrayList<>();
+		List<User> userList;
 		userList = userDataStore.findAll();
 		return userList;
 	}
@@ -116,12 +112,11 @@ public class UserService implements IBasicService, UserDetailsService {
 	 */
 	private String getLocalizedErrorMessage(String errorMessageCode, Object[] params) {
 		Locale locale = LocaleContextHolder.getLocale();
-		String errorMesssageFromResouce = messageSouce.getMessage(errorMessageCode, params, "Default Message", locale);
-		return errorMesssageFromResouce;
+        return messageSource.getMessage(errorMessageCode, params, "Default Message", locale);
 	}
 
 	public User registerUser(@Valid User user) throws ExistingResourceException {
-		User existingUser = null;
+		User existingUser;
 		String inputEmailAddress = user.getUserEmailAddress();
 		String inputUserName = user.getUserName().toLowerCase();
 		if (null != inputEmailAddress) {
@@ -131,29 +126,20 @@ public class UserService implements IBasicService, UserDetailsService {
 				boolean isUserNameExists = existingUser.getUserName().equals(inputUserName);
 
 				Object[] params = null;
-				StringBuilder errorMesage = new StringBuilder(
+				StringBuilder errorMessage = new StringBuilder(
 						getLocalizedErrorMessage(ErrorMessageConstants.EXISTING_USER, params));
 				if (isEmailAddressExists) {
 					params = new Object[1];
 					params[0] = user.getUserEmailAddress();
-					errorMesage.append(getLocalizedErrorMessage(ErrorMessageConstants.EMAIL_ID_DUPLICATE, params));
+					errorMessage.append(getLocalizedErrorMessage(ErrorMessageConstants.EMAIL_ID_DUPLICATE, params));
 				} else if (isUserNameExists) {
 					params = new Object[1];
 					params[0] = user.getUserEmailAddress();
-					errorMesage.append(getLocalizedErrorMessage(ErrorMessageConstants.USERNAME_DUPLICATE, params));
+					errorMessage.append(getLocalizedErrorMessage(ErrorMessageConstants.USERNAME_DUPLICATE, params));
 				}
-				throw new ExistingResourceException(errorMesage.toString());
+				throw new ExistingResourceException(errorMessage.toString());
 			}
 		}
-		/*
-		 * START: Tactical solution for password storage. TODO : Spring Security to be
-		 * used
-		 */
-//		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-		/*
-		 * END: Tactical solution for password storage.
-		 *
-		 */
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return createNewUser(user);
 	}
@@ -163,7 +149,7 @@ public class UserService implements IBasicService, UserDetailsService {
 	 * @param loginRequest the login request
 	 * @return the login response
 	 */
-	public LoginResponse authenticate(@Valid LoginRequest loginRequest) { 
+	public LoginResponse authenticate(@Valid LoginRequest loginRequest) throws UserNotFoundException {
 		LoginResponse authenticatedUser = null;
 		User existingUser = null;
 		String requestUsername = loginRequest.getUsername();
@@ -175,11 +161,11 @@ public class UserService implements IBasicService, UserDetailsService {
 				String token = (jwtUtil.getToken(existingUser));
 				authenticatedUser = new LoginResponse(existingUser.getUserName(),
 						existingUser, token);
-			} 
-			else { 
-				authenticatedUser = null; 
-				} 
-			} 
+			}
+		}
+		else{
+			throw new UserNotFoundException("User not found:"+loginRequest.getUsername());
+		}
 		return authenticatedUser; 
 	}
 	 
@@ -193,9 +179,8 @@ public class UserService implements IBasicService, UserDetailsService {
 		}
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority("USER"));
-		UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-				optioanlUser.getUserName().toLowerCase(), optioanlUser.getPassword(), authorities);
-		return userDetails;
+        return new org.springframework.security.core.userdetails.User(
+                optioanlUser.getUserName().toLowerCase(), optioanlUser.getPassword(), authorities);
 	}
 	
 	public User findUserByUsername(String username) {

@@ -24,13 +24,13 @@ public class PostController {
 
     @PutMapping(path = "/{id}")
     public BaseModel<Post> updatePost(@RequestHeader(name = "X-username") String userName,
-            @PathVariable UUID postId, @RequestBody Post postToUpdate){
-        return postService.updatePostById(userName,postId,postToUpdate);
+            @PathVariable UUID id, @RequestBody Post postToUpdate){
+        return postService.updatePostById(userName,id,postToUpdate);
     }
 
     @DeleteMapping(path = "/{id}")
     public BaseModel<String> updatePost(@RequestHeader(name = "X-username") String userName,
-                           @PathVariable UUID postId){
-        return postService.deletePostById(userName,postId);
+                           @PathVariable UUID id){
+        return postService.deletePostById(userName,id);
     }
 }

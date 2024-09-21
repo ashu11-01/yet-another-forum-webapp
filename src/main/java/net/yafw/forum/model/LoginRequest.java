@@ -1,5 +1,10 @@
 package net.yafw.forum.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class LoginRequest {
 
 	private String username;
@@ -9,8 +14,8 @@ public class LoginRequest {
 	
 	
 	/**
-	 * @param username
-	 * @param password
+	 * @param username username of the User to login
+	 * @param password password of the User to login
 	 */
 	public LoginRequest(String username, String password) {
 		super();
@@ -18,19 +23,4 @@ public class LoginRequest {
 		this.password = password;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 }

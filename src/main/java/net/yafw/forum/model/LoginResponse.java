@@ -1,5 +1,10 @@
 package net.yafw.forum.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class LoginResponse {
 
 	private String username;
@@ -10,9 +15,9 @@ public class LoginResponse {
 
 	
 	/**
-	 * @param username
-	 * @param user
-	 * @param token
+	 * @param username username of the logged in user
+	 * @param user authenticated User
+	 * @param token generated JWT
 	 */
 	public LoginResponse(String username, User user, String token) {
 		super();
@@ -21,30 +26,5 @@ public class LoginResponse {
 		this.token = token;
 	}
 
-	public String getUsername() {
-		return username;
-	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
-	
-	
 }
