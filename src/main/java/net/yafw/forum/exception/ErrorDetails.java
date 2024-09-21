@@ -1,10 +1,8 @@
 package net.yafw.forum.exception;
 
-import lombok.Getter;
-
 import java.time.LocalDateTime;
 
-@Getter
+
 public record ErrorDetails(LocalDateTime timestamp, String errorMessage, String errorDescription) {
 
 	/**
