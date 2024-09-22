@@ -29,11 +29,11 @@ jobs:
         cache: maven
     - name: Build with Maven
       env:
-        database-url : ${{DATASOURCE_URL}}
-        database-password: ${{DATASOURCE_PASSWORD}}
-        database-username : ${{DATASOURCE_USERNAME}}
-        jwt-secret : ${{JWT_SECRET_KEY}}
-        jwt-validity : ${{JWT_VALIDITY}}
+        database-url : ${{secrets.DATASOURCE_URL}}
+        database-password: ${{secrets.DATASOURCE_PASSWORD}}
+        database-username : ${{secrets.DATASOURCE_USERNAME}}
+        jwt-secret : ${{secrets.JWT_SECRET_KEY}}
+        jwt-validity : ${{secrets.JWT_VALIDITY}}
         
       run: mvn -Dspring.profiles.active=test -DDATASOURCE_PASSWORD="$database-password" -DDATASOURCE_URL="$database-url" -DDATASOURCE_USERNAME="$database-username" -DJWT_SECRET_KEY="$jwt-secret" -DJWT_VALIDITY="$jwt-validity" -B package --file pom.xml
 
