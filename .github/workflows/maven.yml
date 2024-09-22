@@ -35,8 +35,8 @@ jobs:
           jwt-secret : ${{secrets.JWT_SECRET_KEY}}
           jwt-validity : ${{secrets.JWT_VALIDITY}}
       run: 
-          echo "$database-url"
-          echo "$java-version"
+          echo $database-url;
+          'echo $java-version';
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
