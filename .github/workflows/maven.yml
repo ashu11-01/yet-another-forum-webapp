@@ -27,9 +27,15 @@ jobs:
         java-version: '20'
         distribution: 'temurin'
         cache: maven
-        env: SPRING_PROFILES_ACTIVE=test
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      env:
+        database-url : ${{DATASOURCE_URL}}
+        database-password: ${{DATASOURCE_PASSWORD}}
+        database-username : ${{DATASOURCE_USERNAME}}
+        jwt-secret : ${{JWT_SECRET_KEY}}
+        jwt-validity : ${{JWT_VALIDITY}}
+        
+      run: mvn -Dspring.profiles.active=test -DDATASOURCE_PASSWORD="$database-password" -DDATASOURCE_URL="$database-url" -DDATASOURCE_USERNAME="$database-username" -DJWT_SECRET_KEY="$jwt-secret" -DJWT_VALIDITY="$jwt-validity" -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
