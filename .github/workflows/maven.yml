@@ -14,6 +14,13 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+    database-url : ${{secrets.DATASOURCE_URL}}
+    database-password: ${{secrets.DATASOURCE_PASSWORD}}
+    database-username : ${{secrets.DATASOURCE_USERNAME}}
+    jwt-secret : ${{secrets.JWT_SECRET_KEY}}
+    jwt-validity : ${{secrets.JWT_VALIDITY}}
+
 jobs:
   build:
 
@@ -27,16 +34,8 @@ jobs:
         java-version: '20'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      env:
-        database-url : ${{secrets.DATASOURCE_URL}}
-        database-password: ${{secrets.DATASOURCE_PASSWORD}}
-        database-username : ${{secrets.DATASOURCE_USERNAME}}
-        jwt-secret : ${{secrets.JWT_SECRET_KEY}}
-        jwt-validity : ${{secrets.JWT_VALIDITY}}
-        
-      run: |
-        mvn -Dspring.profiles.active=test -DDATASOURCE_PASSWORD="$database-password" -DDATASOURCE_URL="$database-url" -DDATASOURCE_USERNAME= -DJWT_SECRET_KEY="$jwt-secret" -DJWT_VALIDITY="$jwt-validity" -B package --file pom.xml
+    - name: Build with Maven        
+      run: mvn -Dspring.profiles.active=test -DDATASOURCE_PASSWORD= -DDATASOURCE_URL="$database-url" -DDATASOURCE_USERNAME= -DJWT_SECRET_KEY="$jwt-secret" -DJWT_VALIDITY="$jwt-validity" -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
