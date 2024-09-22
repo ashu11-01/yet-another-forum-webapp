@@ -35,7 +35,8 @@ jobs:
         jwt-secret : ${{secrets.JWT_SECRET_KEY}}
         jwt-validity : ${{secrets.JWT_VALIDITY}}
         
-      run: mvn -Dspring.profiles.active=test -DDATASOURCE_PASSWORD="$env.database-password" -DDATASOURCE_URL="$env.database-url" -DDATASOURCE_USERNAME= -DJWT_SECRET_KEY="$env.jwt-secret" -DJWT_VALIDITY="$env.jwt-validity" -B package --file pom.xml
+      run: |
+        mvn -Dspring.profiles.active=test -DDATASOURCE_PASSWORD="$database-password" -DDATASOURCE_URL="$database-url" -DDATASOURCE_USERNAME= -DJWT_SECRET_KEY="$jwt-secret" -DJWT_VALIDITY="$jwt-validity" -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
