@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +25,7 @@ public class UserRepositoryTest {
     @Autowired
     UserJPARepository userJPARepository;
 
-    User testUser;
+    User testUser,testUser2;
 
     @BeforeEach
     public void setUp(){
@@ -31,12 +33,18 @@ public class UserRepositoryTest {
                 "Test","Name",
                 12,"userId001",
                 "abc@xyz.com",new ArrayList<>(),"pswd11");
+        testUser2 = new User(UUID.randomUUID(),
+                "Ashutosh","Kumar",
+                12,"userId002",
+                "test@forum.net",new ArrayList<>(),"password");
+        userJPARepository.deleteAll();
 
     }
 
     @AfterEach
     public void tearDown(){
         testUser = null;
+        testUser2 = null;
     }
 
     @Test
@@ -71,5 +79,36 @@ public class UserRepositoryTest {
         userJPARepository.save(testUser);
         User actualUser = userJPARepository.findByUserEmailAddress("test@xyz.com");
         assertNull(actualUser);
+    }
+
+    @Test
+    @DisplayName("should return all users")
+    public void testFindAll(){
+        userJPARepository.save(testUser);
+        userJPARepository.save(testUser2);
+        List<User> userList = userJPARepository.findAll();
+        assertNotNull(userList);
+        assertEquals(2,userList.size());
+    }
+
+    @Test
+    @DisplayName("should return one user with given user id")
+    public void testFindById(){
+        userJPARepository.save(testUser);
+        userJPARepository.save(testUser2);
+        List<User> userList = userJPARepository.findAll();
+        User actualUser = userJPARepository.findById(testUser.getId()).get();
+        assertNotNull(actualUser);
+        assertEquals("Test",actualUser.getFirstName());
+    }
+
+    @Test
+    @DisplayName("should not return user if no user present with given user id")
+    public void testFindById01(){
+        userJPARepository.save(testUser);
+        userJPARepository.save(testUser2);
+        List<User> userList = userJPARepository.findAll();
+        Optional<User> actualUser = userJPARepository.findById(UUID.randomUUID());
+        assertFalse(actualUser.isPresent());
     }
 }
